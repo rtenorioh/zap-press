@@ -1,18 +1,13 @@
 # ZAP-PRESS
 
-Hi, this is the implementation example of <a href="https://github.com/pedroslopez/whatsapp-web.js">whatsapp-web.js</a>
+Olá, esta é uma implementação desse repositório <a href="https://github.com/pedroslopez/whatsapp-web.js">whatsapp-web.js</a>
 
-Watch the tutorials:
+### Como usar
 
-- <a href="https://www.youtube.com/channel/UCrPbAoQKz42Gm0mLdWatAEA">Zap das Galáxias</a>
-
-
-### How to use?
-
-- Clone or download this repo
-- Enter to the project directory
-- Run `npm install`
-- Run `npm start`
-- Open browser and go to address `http://localhost:8000`
-- Scan the QR Code
-- Enjoy! 
+- Clone ou faça download deste repositório
+- Entre na pasta do projeto
+- Rode o comando `npm install`
+- Depois `npm start`
+- Com o projeto rodando, acessar o browser no endereço `http://localhost:8000`
+- Ecaneio o QR Code
+- Pronto para uso! 
