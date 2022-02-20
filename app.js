@@ -58,25 +58,19 @@ client.on('message', async msg => {
   //Setar as mensagens de BOT AQUI
   if (msg.body == '!ping') {
     msg.reply('pong');
-  } else if (msg.body == 'good morning') {
-    msg.reply('selamat pagi');
-  } else if (msg.body == '!groups') {
-    client.getChats().then(chats => {
-      const groups = chats.filter(chat => chat.isGroup);
-
-      if (groups.length == 0) {
-        msg.reply('Você ainda não tem um grupo.');
-      } else {
-        let replyMsg = '*SEUS GRUPOS*\n\n';
-        groups.forEach((group, i) => {
-          replyMsg += `ID: ${group.id._serialized}\nNome: ${group.name}\n\n`;
-        });
-        replyMsg += '_Você pode usar o ID do grupo para enviar uma mensagem ao grupo._'
-        msg.reply(replyMsg);
+  } else if (msg.body == 'oi') {
+    msg.reply('olá');
+  } else if(msg.body === '!everyone') {
+    const chat = await msg.getChat();
+    let text = "";
+    let mentions = [];
+      for(let participant of chat.participants) {
+        const contact = await client.getContactById(participant.id._serialized);
+          mentions.push(contact);
+          text += `@${participant.id.user} `;
       }
-    });
+        await chat.sendMessage(text, { mentions });
   }
-
 });
 
 client.initialize();
