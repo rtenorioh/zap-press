@@ -56,11 +56,11 @@ const client = new Client({
 
 client.on('message', async msg => {
   //Setar as mensagens de BOT AQUI
-  if (msg.body == '!ping') {
+  if (msg.body.toLowerCase() == '!ping') {
     msg.reply('pong');
-  } else if (msg.body == 'oi') {
+  } else if (msg.body.toLowerCase() == 'oi') {
     msg.reply('olá');
-  } else if(msg.body === '!everyone') {
+  } else if(msg.body.toLowerCase() === '!everyone') {
     const chat = await msg.getChat();
     let text = "";
     let mentions = [];
@@ -77,7 +77,7 @@ client.initialize();
 
 // Socket IO
 io.on('connection', function(socket) {
-  socket.emit('message', 'Connecting...');
+  socket.emit('message', 'Conectando...');
 
   client.on('qr', (qr) => {
     console.log('QR RECEBIDO', qr);
