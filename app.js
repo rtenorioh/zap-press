@@ -59,7 +59,11 @@ client.on('message', async msg => {
   if (msg.body.toLowerCase() == '!ping') {
     msg.reply('pong');
   } else if (msg.body.toLowerCase() == 'oi') {
-    msg.reply('olá');
+    const chat = await msg.getChat();
+    const contact = await msg.getContact();
+    await chat.sendMessage(`Olá @${contact.id.user}!`, {
+      mentions: [contact]
+    });
   } else if(msg.body.toLowerCase() === '!everyone') {
     const chat = await msg.getChat();
     let text = "";
