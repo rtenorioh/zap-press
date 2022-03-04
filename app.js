@@ -83,16 +83,16 @@ io.on('connection', function(socket) {
     socket.emit('message', 'Whatsapp está pronto!');
   });
 
-  client.on('authenticated', (session) => {
-    socket.emit('authenticated', 'Whatsapp é autenticado!');
+  client.on('authenticated', () => {
+    socket.emit('authenticated', 'Whatsapp autenticado!');
     socket.emit('message', 'Whatsapp é autenticado!');
-    console.log('AUTHENTICATED', session);
-    sessionCfg = session;
-    fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function(err) {
-      if (err) {
-        console.error(err);
-      }
-    });
+    console.log('AUTENTICADO');
+    //sessionCfg = session;
+    //fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function(err) {
+    //  if (err) {
+    //    console.error(err);
+    //  }
+    //});
   });
 
   client.on('auth_failure', function(session) {
