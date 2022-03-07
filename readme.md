@@ -4,7 +4,7 @@ Olá, esta é uma implementação desse repositório <a href="https://github.com
 
 | Funcionalidade	| Status |
 | ------------- | ------------- |
-| Vários dispositivos |	✅ |
+| Vários dispositivos (Multi Device) |	✅ |
 | Enviar mensagens	| ✅ |
 | Receber mensagens	| ✅ |
 | Enviar mídia (imagens/áudio/documentos)	| ✅ |
