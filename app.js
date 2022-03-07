@@ -43,24 +43,33 @@ const client = new Client({
 
 client.on('message', async msg => {
   //Setar as mensagens de BOT AQUI
-  if (msg.body.toLowerCase() == '!ping') {
-    msg.reply('pong');
-  } else if (msg.body.toLowerCase() == 'oi') {
+  if (msg.body.toLowerCase() === '!ping') {
     const chat = await msg.getChat();
+    await chat.sendStateTyping();
+    msg.reply('pong');
+  } else if (msg.type == 'call_log' || msg.type === 'ptt') {
+    const chat = await msg.getChat();
+    await chat.sendStateTyping();
+    msg.reply("Desculpe, muito barulho aqui");
+    msg.reply("Consegue digitar?");
+  } else if (msg.body.toLowerCase() === 'oi') {
+    const chat = await msg.getChat();
+    await chat.sendStateTyping();
     const contact = await msg.getContact();
     await chat.sendMessage(`Olá @${contact.id.user}!`, {
       mentions: [contact]
     });
-  } else if(msg.body.toLowerCase() === '!everyone') {
+  } else if (msg.body.toLowerCase() === '!everyone') {
     const chat = await msg.getChat();
+    await chat.sendStateTyping();
     let text = "";
     let mentions = [];
-      for(let participant of chat.participants) {
-        const contact = await client.getContactById(participant.id._serialized);
-          mentions.push(contact);
-          text += `@${participant.id.user} `;
-      }
-        await chat.sendMessage(text, { mentions });
+    for (let participant of chat.participants) {
+      const contact = await client.getContactById(participant.id._serialized);
+      mentions.push(contact);
+      text += `@${participant.id.user} `;
+    }
+    await chat.sendMessage(text, { mentions });
   }
 });
 
