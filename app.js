@@ -8,7 +8,7 @@ const fs = require('fs');
 const { phoneNumberFormatter } = require('./helpers/formatter');
 const fileUpload = require('express-fileupload');
 const axios = require('axios');
-const mime = require('mime-types');
+//const mime = require('mime-types');
 
 const port = process.env.PORT || 8000;
 
@@ -24,11 +24,11 @@ app.use(fileUpload({
   debug: true
 }));
 
-const SESSION_FILE_PATH = './whatsapp-session.json';
-let sessionCfg;
-if (fs.existsSync(SESSION_FILE_PATH)) {
-  sessionCfg = require(SESSION_FILE_PATH);
-}
+//const SESSION_FILE_PATH = './whatsapp-session.json';
+//let sessionCfg;
+//if (fs.existsSync(SESSION_FILE_PATH)) {
+//  sessionCfg = require(SESSION_FILE_PATH);
+//}
 
 app.get('/', (req, res) => {
   res.sendFile('index.html', {
@@ -43,15 +43,47 @@ const client = new Client({
 
 client.on('message', async msg => {
   //Setar as mensagens de BOT AQUI
+  //Ao enviar !ping o bot responde pong
   if (msg.body.toLowerCase() === '!ping') {
     const chat = await msg.getChat();
     await chat.sendStateTyping();
-    msg.reply('pong');
-  } else if (msg.type == 'call_log' || msg.type === 'ptt') {
+    setTimeout(function () {
+      msg.reply('pong');
+    }, 5000);
+  //!groupinfo responde com as informações do grupo que o bot esta
+  } else if (msg.body.toLowerCase() === '!groupinfo') {
+    let chat = await msg.getChat();
+    await chat.sendStateTyping();
+    setTimeout(function () {
+      if (chat.isGroup) {
+        msg.reply(`*Detalhes do Grupo*\n\rNome: _${chat.name}_\n\rDescrição: _${chat.description}_\n\rCriado em: _${chat.createdAt.toString()}_\n\rCriado por: _${chat.owner.user}_\n\rParticipantes: _${chat.participants.length}_`);
+      } else {
+        msg.reply('Este comando só pode ser usado em Grupo!');
+      }
+    }, 5000);
+  //Comando para enviar mensagem sem precisar salvar contato, ex: !sendto 5522999999999 Mensagem de Teste  
+  } else if (msg.body.startsWith('!sendto ')) {
+    let number = msg.body.split(' ')[1];
+    let messageIndex = msg.body.indexOf(number) + number.length;
+    let message = msg.body.slice(messageIndex, msg.body.length);
+    number = number.includes('@c.us') ? number : `${number}@c.us`;
+    let chat = await msg.getChat();
+    chat.sendSeen();
+    client.sendMessage(number, message);
+  //Atualiza o Status do bot, ex: !status Meu Status de Teste  
+  } else if (msg.body.startsWith('!status ')) {
+    const newStatus = msg.body.split(' ')[1];
+    await client.setStatus(newStatus);
+    msg.reply(`O status do bot foi atualizado para:\n*${newStatus}*`);  
+  //Esta função retorna uma mensagem automaticamente quando recebe audio 
+  } else if (msg.type === 'ptt') {
     const chat = await msg.getChat();
     await chat.sendStateTyping();
-    msg.reply("Desculpe, muito barulho aqui");
-    msg.reply("Consegue digitar?");
+    setTimeout(function () {
+      msg.reply("Desculpe, muito barulho aqui");
+      msg.reply("Consegue digitar?");
+    }, 5000);
+  //Esta função retorna uma mensagem mencionando a pessoa 
   } else if (msg.body.toLowerCase() === 'oi') {
     const chat = await msg.getChat();
     await chat.sendStateTyping();
@@ -59,6 +91,7 @@ client.on('message', async msg => {
     await chat.sendMessage(`Olá @${contact.id.user}!`, {
       mentions: [contact]
     });
+  //Menciona todos os usuários que estão no grupo
   } else if (msg.body.toLowerCase() === '!everyone') {
     const chat = await msg.getChat();
     await chat.sendStateTyping();
