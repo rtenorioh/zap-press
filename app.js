@@ -91,6 +91,13 @@ client.on('message', async msg => {
     await chat.sendMessage(`Olá @${contact.id.user}!`, {
       mentions: [contact]
     });
+  //Retorna uma localização pré determinada
+  } else if (msg.body.toLowerCase() === '!location') {
+    const chat = await msg.getChat();
+    await chat.sendStateTyping();
+    setTimeout(function () {
+      msg.reply(new Location(-12.9827597, -38.4970223, 'Salvador Shopping\n Salvador - BA'));
+    }, 5000);  
   //Menciona todos os usuários que estão no grupo
   } else if (msg.body.toLowerCase() === '!everyone') {
     const chat = await msg.getChat();
