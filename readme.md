@@ -8,27 +8,27 @@ Olá, esta é uma implementação desse repositório <a href="https://github.com
 | Enviar mensagens	| ✅ |
 | Receber mensagens	| ✅ |
 | Enviar mídia (imagens/áudio/documentos)	| ✅ |
-| Enviar mídia (vídeo) |	✅ [(requer google chrome)](https://wwebjs.dev/guide/handling-attachments.html#caveat-for-sending-videos-and-gifs)  |
-| Enviar adesivos |	✅ |
+| Enviar mídia (vídeo) |	❌✅ [(requer google chrome)](https://wwebjs.dev/guide/handling-attachments.html#caveat-for-sending-videos-and-gifs)  |
+| Enviar adesivos |	❌✅ |
 | Receber mídia (imagens/áudio/vídeo/documentos)	| ✅ |
-| Enviar cartões de contacto	| ✅ |
+| Enviar cartões de contacto	| ❌✅ |
 | Enviar localização	| ✅ |
-| Botões de envio	| ✅ |
-| Enviar listas	| ✅ (Business não suportado) |
-| Local de recebimento	| ✅ |
+| Botões de envio	| ❌✅ |
+| Enviar listas	| ❌✅ (Business não suportado) |
+| Receber Localização	| ✅ |
 | Respostas de mensagens	| ✅ |
-| Participe de grupos por convite	| ✅ |
-| Obter convite para grupo	| ✅ |
-| Modificar informações do grupo (assunto, descrição)	| ✅ |
-| Modificar as configurações do grupo (enviar mensagens, editar informações)	| ✅ |
-| Adicionar participantes do grupo	| ✅ |
-| Participantes do grupo de chute	| ✅ |
-| Promover/rebaixar participantes do grupo	| ✅ |
+| Participe de grupos por convite	| ❌✅ |
+| Obter convite para grupo	| ❌✅ |
+| Modificar informações do grupo (assunto, descrição)	| ❌✅ |
+| Modificar as configurações do grupo (enviar mensagens, editar informações)	| ❌✅ |
+| Adicionar participantes do grupo	| ❌✅ |
+| Expulsar participantes do grupo	| ❌✅ |
+| Promover/rebaixar participantes do grupo	| ❌✅ |
 | Mencionar usuários	| ✅ |
-| Silenciar/ativar bate-papos	| ✅ |
-| Bloquear/desbloquear contatos	| ✅ |
+| Silenciar/ativar bate-papos	| ❌✅ |
+| Bloquear/desbloquear contatos	| ❌✅ |
 | Obter informações de contato	| ✅ |
-| Obter fotos de perfil	| ✅ |
+| Obter fotos de perfil	| ❌✅ |
 | Definir mensagem de status do usuário	| ✅ |
 
 ### Como usar
