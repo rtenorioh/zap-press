@@ -13,7 +13,7 @@ Olá, esta é uma implementação desse repositório <a href="https://github.com
 | Receber mídia (imagens/áudio/vídeo/documentos)	| ✅ |
 | Enviar cartões de contacto	| ❌✅ |
 | Enviar localização	| ✅ |
-| Botões de envio	| ✅ |
+| Botões de envio	| ✅ funciona apenas na versão que não é MD|
 | Enviar listas	| ❌✅ (Business não suportado) |
 | Receber Localização	| ✅ |
 | Respostas de mensagens	| ✅ |
