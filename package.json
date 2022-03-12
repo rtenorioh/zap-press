@@ -1,6 +1,6 @@
 {
   "name": "zap-press",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "zap-press: based on Whatsapp API",
   "main": "app.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "mime-types": "^2.1.32",
     "qrcode": "^1.4.4",
     "socket.io": "^2.4.1",
-    "whatsapp-web.js": "^1.16.2"
+    "whatsapp-web.js": "^1.16.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"
