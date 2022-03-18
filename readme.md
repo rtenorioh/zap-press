@@ -1,4 +1,4 @@
-# ZAP-PRESS
+# ZAP-PRESS <img alt="GitHub package.json dependency version (subfolder of monorepo)" src="https://img.shields.io/github/package-json/dependency-version/rtenorioh/zap-press/whatsapp-web.js">
 
 Olá, esta é uma implementação desse repositório <a href="https://github.com/pedroslopez/whatsapp-web.js">whatsapp-web.js</a>
 
