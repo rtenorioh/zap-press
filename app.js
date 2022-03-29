@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 });
 
 const client = new Client({
-    authStrategy: new LocalAuth(),
+    authStrategy: new LocalAuth({clientId: 'zap-press'}),
     puppeteer: { headless: true }
 });
 
