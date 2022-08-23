@@ -1,6 +1,6 @@
 {
   "name": "zap-press",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "zap-press: based on Whatsapp API",
   "main": "app.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "whatsapp-api",
     "node.js"
   ],
-  "author": "PyPress",
+  "author": "Robson Tenorio Henriques",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.24.0",
@@ -23,7 +23,7 @@
     "mime-types": "^2.1.32",
     "qrcode": "^1.4.4",
     "socket.io": "^2.4.1",
-    "whatsapp-web.js": "^1.16.6"
+    "whatsapp-web.js": "^1.17.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"
