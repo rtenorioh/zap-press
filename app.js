@@ -1,6 +1,15 @@
-const { Client, Location, List, Buttons, MessageMedia, LocalAuth } = require('whatsapp-web.js');
+const { 
+  Client, 
+  List, 
+  Buttons, 
+  MessageMedia, 
+  LocalAuth 
+} = require('whatsapp-web.js');
 const express = require('express');
-const { body, validationResult } = require('express-validator');
+const { 
+  body, 
+  validationResult 
+} = require('express-validator');
 const socketIO = require('socket.io');
 const qrcode = require('qrcode');
 const http = require('http');
@@ -24,12 +33,6 @@ app.use(fileUpload({
   debug: true
 }));
 
-//const SESSION_FILE_PATH = './whatsapp-session.json';
-//let sessionCfg;
-//if (fs.existsSync(SESSION_FILE_PATH)) {
-//  sessionCfg = require(SESSION_FILE_PATH);
-//}
-
 app.get('/', (req, res) => {
   res.sendFile('index.html', {
     root: __dirname
@@ -37,8 +40,41 @@ app.get('/', (req, res) => {
 });
 
 const client = new Client({
-    authStrategy: new LocalAuth({clientId: 'zap-press'}),
-    puppeteer: { headless: true }
+  authStrategy: new LocalAuth({ clientId: 'zap-press' }),
+  puppeteer: {
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--log-level=3',
+      '--no-default-browser-check',
+      '--disable-site-isolation-trials',
+      '--no-experiments',
+      '--ignore-gpu-blacklist',
+      '--ignore-certificate-errors',
+      '--ignore-certificate-errors-spki-list',
+      '--disable-gpu',
+      '--disable-extensions',
+      '--disable-default-apps',
+      '--enable-features=NetworkService',
+      '--disable-setuid-sandbox',
+      '--no-sandbox',
+      '--disable-webgl',
+      '--disable-threaded-animation',
+      '--disable-threaded-scrolling',
+      '--disable-in-process-stack-traces',
+      '--disable-histogram-customizer',
+      '--disable-gl-extensions',
+      '--disable-composited-antialiasing',
+      '--disable-canvas-aa',
+      '--disable-3d-apis',
+      '--disable-accelerated-2d-canvas',
+      '--disable-accelerated-jpeg-decoding',
+      '--disable-accelerated-mjpeg-decode',
+      '--disable-app-list-dismiss-on-blur',
+      '--disable-accelerated-video-decode'
+    ],
+  }
 });
 
 client.on('message', async msg => {
@@ -50,7 +86,7 @@ client.on('message', async msg => {
     setTimeout(function () {
       msg.reply('pong');
     }, 5000);
-  //!groupinfo responde com as informações do grupo que o bot esta
+    //!groupinfo responde com as informações do grupo que o bot esta
   } else if (msg.body.toLowerCase() === '!groupinfo') {
     let chat = await msg.getChat();
     await chat.sendStateTyping();
@@ -61,7 +97,7 @@ client.on('message', async msg => {
         msg.reply('Este comando só pode ser usado em Grupo!');
       }
     }, 5000);
-  //Comando para enviar mensagem sem precisar salvar contato, ex: !sendto 5522999999999 Mensagem de Teste  
+    //Comando para enviar mensagem sem precisar salvar contato, ex: !sendto 5522999999999 Mensagem de Teste  
   } else if (msg.body.startsWith('!sendto ')) {
     let number = msg.body.split(' ')[1];
     let messageIndex = msg.body.indexOf(number) + number.length;
@@ -70,20 +106,22 @@ client.on('message', async msg => {
     let chat = await msg.getChat();
     chat.sendSeen();
     client.sendMessage(number, message);
-  //Atualiza o Status do bot, ex: !status Meu Status de Teste  
+    //Atualiza o Status do bot, ex: !status Meu Status de Teste  
   } else if (msg.body.startsWith('!status ')) {
     const newStatus = msg.body.split(' ')[1];
     await client.setStatus(newStatus);
-    msg.reply(`O status do bot foi atualizado para:\n*${newStatus}*`);  
-  //Esta função retorna uma mensagem automaticamente quando recebe audio 
+    msg.reply(`O status do bot foi atualizado para:\n*${newStatus}*`);
+    //Esta função retorna uma mensagem automaticamente quando recebe audio 
   } else if (msg.type === 'ptt') {
     const chat = await msg.getChat();
     await chat.sendStateTyping();
     setTimeout(function () {
       msg.reply("Desculpe, muito barulho aqui");
-      msg.reply("Consegue digitar?");
-    }, 5000);
-  //Esta função retorna uma mensagem mencionando a pessoa 
+    }, 4000);
+    setTimeout(function () {
+      client.sendMessage(msg.from, "Consegue digitar?");
+    }, 8000);
+    //Esta função retorna uma mensagem mencionando a pessoa 
   } else if (msg.body.toLowerCase() === 'oi') {
     const chat = await msg.getChat();
     await chat.sendStateTyping();
@@ -91,32 +129,29 @@ client.on('message', async msg => {
     await chat.sendMessage(`Olá @${contact.id.user}!`, {
       mentions: [contact]
     });
-  //Retorna uma localização pré determinada
-  } else if (msg.body.toLowerCase() === '!location') {
-    const chat = await msg.getChat();
-    await chat.sendStateTyping();
-    setTimeout(function () {
-      msg.reply(new Location(-12.9827597, -38.4970223, 'Salvador Shopping\n Salvador - BA'));
-    }, 5000);  
-  //Menciona todos os usuários que estão no grupo
+    //Menciona todos os usuários que estão no grupo
   } else if (msg.body.toLowerCase() === '!everyone') {
     const chat = await msg.getChat();
     await chat.sendStateTyping();
-    let text = "";
-    let mentions = [];
-    for (let participant of chat.participants) {
-      const contact = await client.getContactById(participant.id._serialized);
-      mentions.push(contact);
-      text += `@${participant.id.user} `;
+    if (chat.isGroup) {
+      let text = "";
+      let mentions = [];
+      for (let participant of chat.participants) {
+        const contact = await client.getContactById(participant.id._serialized);
+        mentions.push(contact);
+        text += `@${participant.id.user} `;
+      }
+      await chat.sendMessage(text, { mentions });
+    } else {
+      msg.reply('Este comando só pode ser usado em Grupo!');
     }
-    await chat.sendMessage(text, { mentions });
   }
 });
 
 client.initialize();
 
 // Socket IO
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
   socket.emit('message', 'Conectando...');
 
   client.on('qr', (qr) => {
@@ -136,31 +171,24 @@ io.on('connection', function(socket) {
     socket.emit('authenticated', 'Whatsapp autenticado!');
     socket.emit('message', 'Whatsapp é autenticado!');
     console.log('AUTENTICADO');
-    //sessionCfg = session;
-    //fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function(err) {
-    //  if (err) {
-    //    console.error(err);
-    //  }
-    //});
   });
 
-  client.on('auth_failure', function(session) {
+  client.on('auth_failure', function (session) {
     socket.emit('message', 'Falha de autenticação, reiniciando...');
   });
 
   client.on('disconnected', (reason) => {
     socket.emit('message', 'Whatsapp está desconectado!');
-    fs.unlinkSync(SESSION_FILE_PATH, function(err) {
-        if(err) return console.log(err);
-        console.log('Arquivo de sessão excluído!');
+    fs.unlinkSync(SESSION_FILE_PATH, function (err) {
+      if (err) return console.log(err);
+      console.log('Arquivo de sessão excluído!');
     });
     client.destroy();
     client.initialize();
   });
 });
 
-
-const checkRegisteredNumber = async function(number) {
+const checkRegisteredNumber = async function (number) {
   const isRegistered = await client.isRegisteredUser(number);
   return isRegistered;
 }
@@ -242,9 +270,9 @@ app.post('/send-media', async (req, res) => {
   });
 });
 
-const findGroupByName = async function(name) {
+const findGroupByName = async function (name) {
   const group = await client.getChats().then(chats => {
-    return chats.find(chat => 
+    return chats.find(chat =>
       chat.isGroup && chat.name.toLowerCase() == name.toLowerCase()
     );
   });
@@ -333,7 +361,7 @@ app.post('/clear-message', [
   }
 
   const chat = await client.getChatById(number);
-  
+
   chat.clearMessages().then(status => {
     res.status(200).json({
       status: true,
@@ -356,7 +384,7 @@ app.post('/send-button', [
   body('bt3').notEmpty(),
   body('buttonTitle').notEmpty(),
   body('buttonFooter').notEmpty()
-  
+
 ], async (req, res) => {
   const errors = validationResult(req).formatWith(({
     msg
@@ -378,7 +406,7 @@ app.post('/send-button', [
   const bt3 = req.body.bt3;
   const buttonTitle = req.body.buttonTitle;
   const buttonFooter = req.body.buttonFooter;
-  const button = new Buttons(buttonBody,[{body:bt1},{body:bt2},{body:bt3}],buttonTitle,buttonFooter);
+  const button = new Buttons(buttonBody, [{ body: bt1 }, { body: bt2 }, { body: bt3 }], buttonTitle, buttonFooter);
 
   const isRegisteredNumber = await checkRegisteredNumber(number);
 
@@ -402,7 +430,7 @@ app.post('/send-button', [
   });
 });
 
-
+// Send List
 app.post('/send-list', [
   body('number').notEmpty(),
   body('ListItem1').notEmpty(),
@@ -413,7 +441,6 @@ app.post('/send-list', [
   body('btnText').notEmpty(),
   body('Title').notEmpty(),
   body('footer').notEmpty()
-  
 ], async (req, res) => {
   const errors = validationResult(req).formatWith(({
     msg
@@ -439,8 +466,8 @@ app.post('/send-list', [
   const Title = req.body.Title;
   const footer = req.body.footer;
 
-  const sections = [{title:sectionTitle,rows:[{title:ListItem1, description: desc1},{title:ListItem2, description: desc2}]}];
-  const list = new List(List_body,btnText,sections,Title,footer);
+  const sections = [{ title: sectionTitle, rows: [{ title: ListItem1, description: desc1 }, { title: ListItem2, description: desc2 }] }];
+  const list = new List(List_body, btnText, sections, Title, footer);
 
   const isRegisteredNumber = await checkRegisteredNumber(number);
 
@@ -464,6 +491,6 @@ app.post('/send-list', [
   });
 });
 
-server.listen(port, function() {
+server.listen(port, function () {
   console.log('Aplicativo em execução na porta: ' + port);
 });
