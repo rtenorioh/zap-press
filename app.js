@@ -20,6 +20,7 @@ const axios = require('axios');
 //const mime = require('mime-types');
 
 const port = process.env.PORT || 8000;
+const browser = process.env.CHROME_BIN || undefined;
 
 const app = express();
 const server = http.createServer(app);
@@ -74,6 +75,7 @@ const client = new Client({
       '--disable-app-list-dismiss-on-blur',
       '--disable-accelerated-video-decode'
     ],
+    executablePath: browser
   }
 });
 
